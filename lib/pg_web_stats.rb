@@ -31,11 +31,11 @@ class PgWebStats
   end
 
   def users
-    @users ||= select_by_oid("select oid, rolname from pg_authid_allusers order by rolname;", 'rolname')
+    @users ||= select_by_oid("select oid, rolname from pg_authid order by rolname;", 'rolname')
   end
 
   def databases
-    @databases ||= select_by_oid("select oid, datname from pg_database_allusers order by datname;", 'datname')
+    @databases ||= select_by_oid("select oid, datname from pg_database order by datname;", 'datname')
   end
 
   private
@@ -54,7 +54,7 @@ class PgWebStats
   def build_stats_query(params)
     order_by = params[:order]
 
-    query = "SELECT * FROM pg_stat_statements"
+    query = "SELECT * FROM pg_stat_statements limit 500 "
 
     where_conditions = []
 
@@ -115,7 +115,7 @@ class PgWebStats::Row
   end
 
   def query
-    CodeRay.scan(data["query"].gsub(/\s+/, ' ').strip, "sql").div(:css => :class)
+    CodeRay.scan(data["query"].gsub(/\s+/, ' ')[0..300].strip, "sql").div(:css => :class)
   end
 
   def waste?
