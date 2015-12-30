@@ -31,11 +31,11 @@ class PgWebStats
   end
 
   def users
-    @users ||= select_by_oid("select oid, rolname from pg_authid order by rolname;", 'rolname')
+    @users ||= select_by_oid("select oid, rolname from pg_authid_allusers order by rolname;", 'rolname')
   end
 
   def databases
-    @databases ||= select_by_oid("select oid, datname from pg_database order by datname;", 'datname')
+    @databases ||= select_by_oid("select oid, datname from pg_database_allusers order by datname;", 'datname')
   end
 
   private
